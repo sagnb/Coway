@@ -1,17 +1,59 @@
 import pygame
+from math import sqrt
 from managers.Subject import Subject
 
 class Gate:
-    def __init__(self, x0, y0, x1, y1, cow_width, cow_height):
+    def __init__(self, x0, y0, xf, yf, tam):
         self.x0 = x0
         self.y0 = y0
-        self.x1 = x1
-        self.y1 = y1
+        self.x1 = x0
+        self.y1 = y0 - tam
+        self.xf = xf
+        self.yf = yf
+        self.current_x = self.x1
+        self.current_y = self.y1
+        self.tam = tam
+        self.on = False
 
     def draw(self, window, current_frame):
-        pass
+        print("gate.draw")
+        pygame.draw.line(window, (255, 255, 255), (self.x0, self.y0), (self.current_x, self.current_y))
+
+    def set_on(self, on):
+        self.on = on
+
+        if self.on:
+            self.current_x = self.xf
+            self.current_y = self.yf
+        else:
+            self.current_x = self.x1
+            self.current_y = self.y1
 
 class GateManager(Subject):
     def __init__(self):
         super().__init__()
-        pass
+        self.mode = 0
+        self.gates : list[Gate] = []
+
+    def add(self, x0, y0, xf, yf):
+        tam = sqrt((x0 - xf) ** 2 + (y0 - yf) ** 2)
+        self.gates.append(Gate(x0, y0, xf, yf, tam))
+
+    def set_mode(self, new_mode):
+        self.mode = new_mode
+
+        if self.mode == 0:
+            self.gates[0].set_on(False)
+            self.gates[1].set_on(False)
+        elif self.mode == 1:
+            self.gates[0].set_on(True)
+            self.gates[1].set_on(False)
+        else:
+            self.gates[0].set_on(False)
+            self.gates[1].set_on(True)
+
+
+    def on_draw(self, data):
+        for gate in self.gates:
+            gate.draw(data['window'], data['current_frame'])
+

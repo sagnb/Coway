@@ -1,4 +1,5 @@
 import pygame
+import random
 
 from managers.Subject import Subject
 
@@ -10,6 +11,7 @@ class Cow:
         self.height = heigh
         self.velocity = 20
         self.visible = True
+        self.mark = random.randint(0, 2)
 
     def draw(self, window, current_frame):
         print('cow.draw')
@@ -24,7 +26,7 @@ class Cow:
         elif direction == 'left':
             self.x -= inc
             self.y += inc
-        elif direction == 'rigth':
+        elif direction == 'right':
             self.x += inc
             self.y += inc
 
