@@ -14,26 +14,28 @@ class LogicManager(Subject):
 
     def on_increase_second(self, data):
         print('LogicManager.on_increase_second')
-        current_time = data['current_time']
+        current_frame = data['current_frame']
 
-        if current_time == 1 or not self.cow_manager.cows[-1].visible:
+        if current_frame%60 == 0 and ((not self.cow_manager.cows) or (not self.cow_manager.cows[-1].visible)):
             self.cow_manager.add(self.window_width)
 
-        cow = self.cow_manager.cows[-1]
+        if self.cow_manager.cows:
+            cow = self.cow_manager.cows[-1]
 
-        self.gate_manager.set_mode(cow.mark)
+            if current_frame%60 == 0:
+                self.gate_manager.set_mode(cow.mark)
 
-        if cow.y <= self.window_height:
-            if cow.y > self.wall_manager.walls[0].y1:
-                if cow.mark == 1:
-                    cow.move('left')
-                elif cow.mark == 2:
-                    cow.move('right')
+            if cow.y <= self.window_height:
+                if cow.y > self.wall_manager.walls[0].y1:
+                    if cow.mark == 1:
+                        cow.move('left')
+                    elif cow.mark == 2:
+                        cow.move('right')
+                    else:
+                        cow.move('down')
                 else:
                     cow.move('down')
             else:
-                cow.move('down')
-        else:
-            cow.set_visibility(False)
+                cow.set_visibility(False)
 
 

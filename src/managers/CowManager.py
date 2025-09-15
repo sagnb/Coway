@@ -9,7 +9,7 @@ class Cow:
         self.y = y
         self.width = width
         self.height = heigh
-        self.velocity = 20
+        self.velocity = 2
         self.visible = True
         self.mark = random.randint(0, 2)
 

@@ -14,10 +14,29 @@ class Gate:
         self.current_y = self.y1
         self.tam = tam
         self.on = False
+        self.on_buffer = False
+        self.end_animation = 0
 
     def draw(self, window, current_frame):
         print("gate.draw")
-        pygame.draw.line(window, (255, 255, 255), (self.x0, self.y0), (self.current_x, self.current_y))
+
+        step = 59
+
+        if self.on!= self.on_buffer:
+            self.end_animation = current_frame + step
+            self.on_buffer = self.on
+
+        if current_frame < self.end_animation:
+            delta_x = ((self.xf - self.x0)/step) * ((step - self.end_animation + current_frame) if self.on else (self.end_animation - current_frame))
+            delta_y = sqrt((self.tam**2) - (delta_x**2))
+
+            y = (self.y0 - delta_y)
+
+            x = (self.x0 + delta_x)
+
+            pygame.draw.line(window, (255, 255, 255), (self.x0, self.y0), (x, y))
+        else:
+            pygame.draw.line(window, (255, 255, 255), (self.x0, self.y0), (self.current_x, self.current_y))
 
     def set_on(self, on):
         self.on = on
